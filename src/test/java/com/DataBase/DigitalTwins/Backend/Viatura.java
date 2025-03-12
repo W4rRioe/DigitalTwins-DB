@@ -1,4 +1,4 @@
-package com.DataBase.DigitalTwins;
+package com.DataBase.DigitalTwins.Backend;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
