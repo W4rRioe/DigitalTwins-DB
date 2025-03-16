@@ -1,4 +1,4 @@
-package com.Backend;
+package com.Backend.Classes;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;

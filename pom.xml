@@ -2,33 +2,24 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>3.4.3</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
+
     <groupId>com.DataBase</groupId>
     <artifactId>DigitalTwins</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>DigitalTwins</name>
     <description>Este projeto faz parte da cadeira de DAI (Desenvolvimento de Aplicações Informáticas) e tem como objetivo criar uma solução baseada em Digital Twins para monitorização de autocarros, vias e estações rodoviárias. A aplicação utiliza Spring Boot para gerir a base de dados local, permitindo armazenar e consultar informações sobre os autocarros em tempo real.</description>
-    <url/>
-    <licenses>
-        <license/>
-    </licenses>
-    <developers>
-        <developer/>
-    </developers>
-    <scm>
-        <connection/>
-        <developerConnection/>
-        <tag/>
-        <url/>
-    </scm>
+
     <properties>
-        <java.version>23</java.version>
+        <java.version>17</java.version>
     </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -49,27 +40,41 @@
             <scope>test</scope>
         </dependency>
         
-        <!-- Added Lombok -->
+        <!-- Lombok -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>1.18.30</version>
             <scope>provided</scope>
         </dependency>
-        
-        <!-- Added Jakarta Validation API -->
+
+        <!-- Validation API -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
         
-        <!-- Added WebSockets Support -->
+        <!-- WebSocket -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-websocket</artifactId>
         </dependency>
+
+        <!-- Hibernate Core (caso necessário) -->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>5.6.10.Final</version>
+        </dependency>
+
+        <!-- Jakarta Persistence API -->
+        <dependency>
+            <groupId>jakarta.persistence</groupId>
+            <artifactId>jakarta.persistence-api</artifactId>
+            <version>3.0.0</version>
+        </dependency>
     </dependencies>
-    
+
     <build>
         <plugins>
             <plugin>

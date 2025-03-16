@@ -1,19 +1,20 @@
 -- Tabela de Autocarros (Viaturas)
-CREATE TABLE IF NOT EXISTS autocarros (
-    id IDENTITY PRIMARY KEY,
-    matricula VARCHAR(50) NOT NULL UNIQUE, -- Garante que não existam matrículas duplicadas
-    ano_fabricacao INT NOT NULL CHECK (ano_fabricacao BETWEEN 1990 AND 2026), -- Apenas permite autocarros fabricados entre 1990 e 2026
-    tipo_servico VARCHAR(50) NOT NULL, -- Tipos: Noturno, Regular, Expresso, Turístico, etc.
-    latitude DECIMAL(9,6),  -- Coordenadas geográficas
+CREATE TABLE IF NOT EXISTS Viaturas (
+    id SERIAL PRIMARY KEY,
+    matricula VARCHAR(50) NOT NULL UNIQUE, -- Identificação única do autocarro
+    ano_fabricacao INT NOT NULL CHECK (ano_fabricacao BETWEEN 1990 AND 2026), -- Restrição de ano válido
+    tipo_servico VARCHAR(50) NOT NULL, -- Exemplo: Regular, Expresso, Noturno
+    latitude DECIMAL(9,6),  -- Localização do autocarro
     longitude DECIMAL(9,6),
-    velocidade DECIMAL(5,2) CHECK (velocidade BETWEEN 0 AND 100), -- Máximo de 100 km/h, respeitando os limites legais em Portugal
-    ocupacao INT CHECK (ocupacao BETWEEN 0 AND 120), -- Limite de 120 passageiros, compatível com autocarros articulados
-    nivel_energia DECIMAL(5,2) CHECK (nivel_energia BETWEEN 0 AND 100) NULL, -- Percentagem da bateria (0-100%) ou NULL para autocarros a diesel/gás
-    status_operacional VARCHAR(20) CHECK (status_operacional IN ('Em serviço', 'Fora de serviço', 'Manutenção', 'Avariado')) -- Define o estado do autocarro
+    velocidade DECIMAL(5,2) CHECK (velocidade BETWEEN 0 AND 100), -- Respeitando os limites legais
+    ocupacao INT CHECK (ocupacao BETWEEN 0 AND 120), -- Limite máximo de passageiros
+    nivel_energia DECIMAL(5,2) CHECK (nivel_energia BETWEEN 0 AND 100) NULL, -- Estado da bateria (0 a 100%)
+    status_operacional VARCHAR(20) CHECK (status_operacional IN ('Em serviço', 'Fora de serviço', 'Manutenção', 'Avariado'))
 );
 
+
 -- Tabela das Vias (Ruas e Estradas)
-CREATE TABLE IF NOT EXISTS vias (
+CREATE TABLE IF NOT EXISTS Vias (
     id IDENTITY PRIMARY KEY,
     nome VARCHAR(100) NOT NULL UNIQUE, -- Evita nomes duplicados de vias
     sentido VARCHAR(20) CHECK (sentido IN ('Norte-Sul', 'Leste-Oeste', 'Duplo Sentido')), -- Direções válidas para a organização do trânsito
@@ -24,7 +25,7 @@ CREATE TABLE IF NOT EXISTS vias (
 );
 
 -- Tabela das Estações (Paragens e Terminais)
-CREATE TABLE IF NOT EXISTS estacoes (
+CREATE TABLE IF NOT EXISTS Estacoes (
     id IDENTITY PRIMARY KEY,
     nome VARCHAR(100) NOT NULL UNIQUE, -- Evita nomes repetidos de estações
     localizacao VARCHAR(255), -- Descrição da localização da estação
