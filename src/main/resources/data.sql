@@ -14,8 +14,7 @@ INSERT INTO Vias (nome, sentido, limite_velocidade, fluxo_trafego, evento_trafeg
 ('Via Rápida Braga', 'Norte-Sul', 100, 'Livre', NULL, 'Sol');
 
 -- Inserção de Estações (Exemplos de Dados)
-INSERT INTO Estacoes (nome, localizacao, capacidade, tempo_medio_espera, ocupacao, sensor_temperatura) VALUES
-('Estação Central', 'Braga Centro', 300, 10, 150, 25.5),
-('Terminal Norte', 'Universidade do Minho', 200, 5, 100, 23.0),
-('Paragem Avenida', 'Avenida da Liberdade', 80, 7, 50, 22.0),
-('Estação Sul', 'Rua de São Vicente', 150, 12, 90, 24.5);
+INSERT INTO Estacoes (nome, latitude, longitude, capacidade, tempo_medio_espera, ocupacao, sensor_temperatura) VALUES
+('Estação Central', 41.5536, -8.4303, 300, 10, 150, 25.5),
+('Terminal Carregamento', 41.5530, -8.4272, 200, 5, 100, 23.0),
+('Estação Sul', 41.5520, -8.4279, 150, 12, 90, 24.5);

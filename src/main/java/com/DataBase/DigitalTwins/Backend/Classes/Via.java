@@ -67,6 +67,9 @@ public class Via {
     @Column(name = "data_atualizacao", nullable = false)
     private LocalDateTime dataAtualizacao;
 
+    @OneToMany(mappedBy = "via", cascade = CascadeType.ALL)
+    private List<PontoVia> pontos;
+
     @Version
     private Long versao;
 }

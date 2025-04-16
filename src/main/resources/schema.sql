@@ -12,7 +12,6 @@ CREATE TABLE IF NOT EXISTS Viaturas (
     status_operacional VARCHAR(20) CHECK (status_operacional IN ('Em serviço', 'Fora de serviço', 'Manutenção', 'Avariado'))
 );
 
-
 -- Tabela das Vias (Ruas e Estradas)
 CREATE TABLE IF NOT EXISTS Vias (
     id IDENTITY PRIMARY KEY,
@@ -28,13 +27,13 @@ CREATE TABLE IF NOT EXISTS Vias (
 CREATE TABLE IF NOT EXISTS Estacoes (
     id IDENTITY PRIMARY KEY,
     nome VARCHAR(100) NOT NULL UNIQUE, -- Evita nomes repetidos de estações
-    localizacao VARCHAR(255), -- Descrição da localização da estação
+    latitude DECIMAL(9,6),  
+    longitude DECIMAL(9,6),
     capacidade INT CHECK (capacidade BETWEEN 50 AND 500), -- Capacidade realista entre 50 e 500 passageiros
     tempo_medio_espera INT CHECK (tempo_medio_espera BETWEEN 5 AND 60), -- Tempo médio de espera realista, entre 5 e 60 minutos
     ocupacao INT CHECK (ocupacao BETWEEN 0 AND 500), -- Número de passageiros na estação (até 500)
     sensor_temperatura DECIMAL(5,2) -- Temperatura ambiente da estação
 );
-
 
 /*
 =================================================================

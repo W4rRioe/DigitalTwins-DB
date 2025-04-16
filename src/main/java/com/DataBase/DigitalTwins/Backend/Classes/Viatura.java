@@ -1,22 +1,15 @@
 package com.DataBase.DigitalTwins.Backend.Classes;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-
-import java.time.LocalDateTime;
+import jakarta.validation.constraints.*;
+import lombok.*;
 
 @Entity
-@Table(name = "Viaturas") // Nome da tabela igual ao banco de dados
+@Table(name = "Viaturas")
 @Data
-@Builder
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Viatura {
 
     @Id
@@ -24,135 +17,74 @@ public class Viatura {
     private Long id;
 
     @NotBlank(message = "A matrícula é obrigatória")
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = true, length = 50)
     private String matricula;
 
-    @Min(value = 1990, message = "Ano de fabricação deve estar entre 1990 e 2026")
-    @Max(value = 2026, message = "Ano de fabricação deve estar entre 1990 e 2026")
+    @Min(1990) @Max(2026)
     @Column(name = "ano_fabricacao", nullable = false)
     private int anoFabricacao;
 
-    @NotBlank(message = "O tipo de serviço é obrigatório")
-    @Column(name = "tipo_servico", nullable = false)
+    @NotBlank
+    @Column(name = "tipo_servico", nullable = false, length = 50)
     private String tipoServico;
 
-    @Column(name = "latitude")
+    @Column(columnDefinition = "DECIMAL(9,6)")
     private Double latitude;
 
-    @Column(name = "longitude")
+    @Column(columnDefinition = "DECIMAL(9,6)")
     private Double longitude;
 
-    @Column(name = "velocidade")
-    @Min(value = 0, message = "A velocidade não pode ser negativa")
-    @Max(value = 100, message = "A velocidade máxima permitida é 100 km/h")
+    @DecimalMin("0") @DecimalMax("100")
+    @Column(columnDefinition = "DECIMAL(5,2)")
     private Double velocidade;
 
-    @Column(name = "ocupacao")
-    @Min(value = 0, message = "A ocupação não pode ser negativa")
-    @Max(value = 120, message = "A ocupação não pode exceder 120 passageiros")
+    @Min(0) @Max(120)
     private Integer ocupacao;
 
-    @Column(name = "nivel_energia")
-    @Min(value = 0, message = "O nível de energia não pode ser negativo")
-    @Max(value = 100, message = "O nível de energia deve estar entre 0 e 100%")
+    @DecimalMin("0") @DecimalMax("100")
+    @Column(name = "nivel_energia", columnDefinition = "DECIMAL(5,2)")
     private Double nivelEnergia;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "status_operacional", nullable = false)
+    @Convert(converter = StatusOperacionalConverter.class)
+    @Column(name = "status_operacional", nullable = false, length = 20)
     private StatusOperacional statusOperacional;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "via_atual_id")
-    private Via viaAtual; // Relacionamento com a tabela Vias
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "estacao_atual_id")
-    private Estacao estacaoAtual; // Relacionamento com a tabela Estacoes
-
-    @CreationTimestamp
-    @Column(name = "data_criacao", nullable = false, updatable = false)
-    private LocalDateTime dataCriacao;
-
-    @UpdateTimestamp
-    @Column(name = "data_atualizacao", nullable = false)
-    private LocalDateTime dataAtualizacao;
-
     public enum StatusOperacional {
-        EM_SERVICO, FORA_DE_SERVICO, MANUTENCAO, AVARIADO
+        EM_SERVICO("Em serviço"),
+        FORA_DE_SERVICO("Fora de serviço"),
+        MANUTENCAO("Manutenção"),
+        AVARIADO("Avariado");
+
+        private final String dbValue;
+
+        StatusOperacional(String dbValue) {
+            this.dbValue = dbValue;
+        }
+
+        public String getDbValue() {
+            return dbValue;
+        }
+
+        public static StatusOperacional fromDbValue(String dbValue) {
+            for (StatusOperacional status : values()) {
+                if (status.dbValue.equals(dbValue)) {
+                    return status;
+                }
+            }
+            throw new IllegalArgumentException("Status desconhecido: " + dbValue);
+        }
     }
 
-    public Long getId() {
-        return id;
-    }
+    @Converter(autoApply = true)
+    public static class StatusOperacionalConverter implements AttributeConverter<StatusOperacional, String> {
+        @Override
+        public String convertToDatabaseColumn(StatusOperacional attribute) {
+            return attribute == null ? null : attribute.getDbValue();
+        }
 
-    public String getMatricula() {
-        return matricula;
-    }
-
-    public int getAnoFabricacao() {
-        return anoFabricacao;
-    }
-
-    public String getTipoServico() {
-        return tipoServico;
-    }
-
-    public Double getLatitude() {
-        return latitude;
-    }
-
-    public Double getLongitude() {
-        return longitude;
-    }
-
-    public Double getVelocidade() {
-        return velocidade;
-    }
-
-    public Integer getOcupacao() {
-        return ocupacao;
-    }
-
-    public Double getNivelEnergia() {
-        return nivelEnergia;
-    }
-
-    public StatusOperacional getStatusOperacional() {
-        return statusOperacional;
-    }
-
-    public Via getViaAtual() {
-        return viaAtual;
-    }
-
-    public Estacao getEstacaoAtual() {
-        return estacaoAtual;
-    }
-
-    public LocalDateTime getDataCriacao() {
-        return dataCriacao;
-    }
-
-    public LocalDateTime getDataAtualizacao() {
-        return dataAtualizacao;
-    }
-
-    public Viatura(Long id, String matricula, int anoFabricacao, String tipoServico, Double latitude, Double longitude,
-                   Double velocidade, Integer ocupacao, Double nivelEnergia, StatusOperacional statusOperacional,
-                   Via viaAtual, Estacao estacaoAtual, LocalDateTime dataCriacao, LocalDateTime dataAtualizacao) {
-        this.id = id;
-        this.matricula = matricula;
-        this.anoFabricacao = anoFabricacao;
-        this.tipoServico = tipoServico;
-        this.latitude = latitude;
-        this.longitude = longitude;
-        this.velocidade = velocidade;
-        this.ocupacao = ocupacao;
-        this.nivelEnergia = nivelEnergia;
-        this.statusOperacional = statusOperacional;
-        this.viaAtual = viaAtual;
-        this.estacaoAtual = estacaoAtual;
-        this.dataCriacao = dataCriacao;
-        this.dataAtualizacao = dataAtualizacao;
+        @Override
+        public StatusOperacional convertToEntityAttribute(String dbData) {
+            return dbData == null ? null : StatusOperacional.fromDbValue(dbData);
+        }
     }
 }

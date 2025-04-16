@@ -1,30 +1,32 @@
 package com.DataBase.DigitalTwins.Controllers;
 
 import org.springframework.web.bind.annotation.*;
-
 import com.DataBase.DigitalTwins.Backend.Classes.Viatura;
 import com.DataBase.DigitalTwins.Backend.Gestao.BatteryDepletionService;
 import com.DataBase.DigitalTwins.Backend.Gestao.GestaoAutocarros;
-
+import com.DataBase.DigitalTwins.Backend.Gestao.ViaturaService;
 import org.springframework.http.ResponseEntity;
-
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/viaturas")
 public class ViaturaController {
 
+    private final ViaturaService viaturaService;
     private final GestaoAutocarros gestaoAutocarros;
     private final BatteryDepletionService batteryDepletionService;
 
-    public ViaturaController(GestaoAutocarros gestaoAutocarros, BatteryDepletionService batteryDepletionService) {
+    public ViaturaController(ViaturaService viaturaService, 
+                           GestaoAutocarros gestaoAutocarros, 
+                           BatteryDepletionService batteryDepletionService) {
+        this.viaturaService = viaturaService;
         this.gestaoAutocarros = gestaoAutocarros;
         this.batteryDepletionService = batteryDepletionService;
     }
 
     @GetMapping
     public List<Viatura> listarViaturas() {
-        return GestaoAutocarros.getViaturas();
+        return viaturaService.listarTodas();
     }
 
     @GetMapping("/{id}")
@@ -49,13 +51,11 @@ public class ViaturaController {
         }
     }
 
-    // Método PUT para atualizar uma viatura
     @PutMapping("/{id}")
     public ResponseEntity<Viatura> atualizarViatura(@PathVariable Long id, @RequestBody Viatura viaturaAtualizada) {
         Viatura viaturaExistente = gestaoAutocarros.encontrarViaturaPorId(id);
 
         if (viaturaExistente != null) {
-            // Atualiza os campos da viatura existente com os dados recebidos
             viaturaExistente.setMatricula(viaturaAtualizada.getMatricula());
             viaturaExistente.setAnoFabricacao(viaturaAtualizada.getAnoFabricacao());
             viaturaExistente.setTipoServico(viaturaAtualizada.getTipoServico());
@@ -65,12 +65,9 @@ public class ViaturaController {
             viaturaExistente.setOcupacao(viaturaAtualizada.getOcupacao());
             viaturaExistente.setVelocidade(viaturaAtualizada.getVelocidade());
             viaturaExistente.setStatusOperacional(viaturaAtualizada.getStatusOperacional());
-            // Adicione outros campos que precisam ser atualizados
-
-            // Retorna a viatura atualizada com status 200 OK
+            
             return ResponseEntity.ok(viaturaExistente);
         } else {
-            // Se a viatura não for encontrada, retorna status 404 Not Found
             return ResponseEntity.notFound().build();
         }
     }

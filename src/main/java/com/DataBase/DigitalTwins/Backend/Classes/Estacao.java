@@ -1,22 +1,11 @@
 package com.DataBase.DigitalTwins.Backend.Classes;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-
-import java.time.LocalDateTime;
-import java.util.List;
+import jakarta.validation.constraints.*;
+import lombok.*;
 
 @Entity
-@Table(name = "estacoes")
+@Table(name = "Estacoes")
 @Data
 @Builder
 @NoArgsConstructor
@@ -29,59 +18,47 @@ public class Estacao {
 
     @NotBlank(message = "O nome da estação é obrigatório")
     @Size(min = 2, max = 100, message = "O nome deve ter entre 2 e 100 caracteres")
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String nome;
 
-    @NotBlank(message = "A localização é obrigatória")
-    @Column(nullable = false)
-    private String localizacao;
-    
-    @Min(value = 0, message = "A capacidade não pode ser negativa")
-    @Column(nullable = false)
-    private int capacidade;
+    @NotNull(message = "A latitude é obrigatória")
+    @Column(columnDefinition = "DECIMAL(9,6)")
+    private Double latitude;
 
-    @ElementCollection
-    @CollectionTable(name = "estacao_infraestruturas", joinColumns = @JoinColumn(name = "estacao_id"))
-    @Column(name = "infraestrutura")
-    private List<String> infraestruturas;
-    
-    @Column(name = "horario_funcionamento")
-    private String horarioFuncionamento;
-    
-    @Column(name = "tempo_medio_espera")
-    private double tempoMedioEspera;
-    
+    @NotNull(message = "A longitude é obrigatória")
+    @Column(columnDefinition = "DECIMAL(9,6)")
+    private Double longitude;
+
+    @NotNull(message = "A capacidade é obrigatória")
+    @Min(value = 50, message = "A capacidade mínima é 50")
+    @Max(value = 500, message = "A capacidade máxima é 500")
     @Column(nullable = false)
-    private boolean atrasos;
-    
+    private Integer capacidade;
+
+    @NotNull(message = "O tempo médio de espera é obrigatório")
+    @Min(value = 5, message = "O tempo mínimo de espera é 5 minutos")
+    @Max(value = 60, message = "O tempo máximo de espera é 60 minutos")
+    @Column(name = "tempo_medio_espera", nullable = false)
+    private Integer tempoMedioEspera;
+
+    @NotNull(message = "A ocupação é obrigatória")
     @Min(value = 0, message = "A ocupação não pode ser negativa")
-    @Max(value = 100, message = "A ocupação não pode exceder 100%")
+    @Max(value = 500, message = "A ocupação máxima é 500 passageiros")
     @Column(nullable = false)
-    private double ocupacao;
-    
-    @Column(name = "sensores_ambientais", length = 1000)
-    private String sensoresAmbientais;
-    
-    @Column(name = "eventos_especiais", length = 1000)
-    private String eventosEspeciais;
-    
-    @CreationTimestamp
-    @Column(name = "data_criacao", nullable = false, updatable = false)
-    private LocalDateTime dataCriacao;
-    
-    @UpdateTimestamp
-    @Column(name = "data_atualizacao", nullable = false)
-    private LocalDateTime dataAtualizacao;
-    
+    private Integer ocupacao;
+
+    private Double sensorTemperatura;
+
     @Version
+    @Column(nullable = false)
     private Long versao;
-    
-    @Column(name = "status_operacional")
-    @Enumerated(EnumType.STRING)
-    @Builder.Default
-    private StatusOperacional statusOperacional = StatusOperacional.NORMAL;
-    
-    public enum StatusOperacional {
-        NORMAL, MANUTENÇÃO, FECHADA, EMERGÊNCIA
+
+    // Método para atualizar as coordenadas
+    public void atualizarCoordenadas(Double latitude, Double longitude) {
+        if (latitude == null || longitude == null) {
+            throw new IllegalArgumentException("Latitude e longitude não podem ser nulas");
+        }
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 }
