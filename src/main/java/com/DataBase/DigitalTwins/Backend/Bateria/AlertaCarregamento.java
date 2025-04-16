@@ -1,4 +1,4 @@
-package com.Backend.Bateria;
+package com.DataBase.DigitalTwins.Backend.Bateria;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

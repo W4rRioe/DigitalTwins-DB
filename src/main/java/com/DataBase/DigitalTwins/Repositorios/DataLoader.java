@@ -1,8 +1,9 @@
-package com.Repositorios;
+package com.DataBase.DigitalTwins.Repositorios;
 
-import com.Backend.Classes.Viatura;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
+
+import com.DataBase.DigitalTwins.Backend.Classes.Viatura;
 
 import java.util.List;
 
@@ -20,10 +21,10 @@ public class DataLoader implements CommandLineRunner {
         List<Viatura> viaturas = viaturaRepository.findAll(); 
         
         if (viaturas.isEmpty()) {
-            System.out.println("⚠️ Nenhuma viatura encontrada no banco de dados.");
+            System.out.println("Nenhuma viatura encontrada no banco de dados.");
         } else {
-            System.out.println("✅ Viaturas carregadas da base de dados:");
-            viaturas.forEach(v -> System.out.println("🚍 " + v.getMatricula() + " - " + v.getStatusOperacional()));
+            System.out.println("Viaturas carregadas da base de dados:");
+            viaturas.forEach(v -> System.out.println(v.getMatricula() + " - " + v.getStatusOperacional()));
         }
     }
 }

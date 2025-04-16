@@ -1,18 +1,22 @@
-package com.Backend.Classes;
+package com.DataBase.DigitalTwins.Backend.Classes;
 
-import java.time.LocalDateTime;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
-import lombok.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "Viaturas") // Nome da tabela igual ao banco de dados
 @Data
 @Builder
 @NoArgsConstructor
-@AllArgsConstructor
 public class Viatura {
 
     @Id
@@ -131,5 +135,24 @@ public class Viatura {
 
     public LocalDateTime getDataAtualizacao() {
         return dataAtualizacao;
+    }
+
+    public Viatura(Long id, String matricula, int anoFabricacao, String tipoServico, Double latitude, Double longitude,
+                   Double velocidade, Integer ocupacao, Double nivelEnergia, StatusOperacional statusOperacional,
+                   Via viaAtual, Estacao estacaoAtual, LocalDateTime dataCriacao, LocalDateTime dataAtualizacao) {
+        this.id = id;
+        this.matricula = matricula;
+        this.anoFabricacao = anoFabricacao;
+        this.tipoServico = tipoServico;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.velocidade = velocidade;
+        this.ocupacao = ocupacao;
+        this.nivelEnergia = nivelEnergia;
+        this.statusOperacional = statusOperacional;
+        this.viaAtual = viaAtual;
+        this.estacaoAtual = estacaoAtual;
+        this.dataCriacao = dataCriacao;
+        this.dataAtualizacao = dataAtualizacao;
     }
 }

@@ -1,6 +1,6 @@
 -- Tabela de Autocarros (Viaturas)
 CREATE TABLE IF NOT EXISTS Viaturas (
-    id SERIAL PRIMARY KEY,
+    id IDENTITY PRIMARY KEY,
     matricula VARCHAR(50) NOT NULL UNIQUE, -- Identificação única do autocarro
     ano_fabricacao INT NOT NULL CHECK (ano_fabricacao BETWEEN 1990 AND 2026), -- Restrição de ano válido
     tipo_servico VARCHAR(50) NOT NULL, -- Exemplo: Regular, Expresso, Noturno
